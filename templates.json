@@ -6,7 +6,7 @@
       "templates": [
         {
           "id": "referral-review",
-          "title": "Patient Case Action Note",
+          "title": "Patient Case Message",
           "copyLabel": "Copy Note",
           "options": [
             {
@@ -29,15 +29,9 @@
               "showWhen": { "provider": true }
             },
             {
-              "id": "packet",
-              "type": "toggle",
-              "label": "Full referral packet included"
-            },
-            {
               "id": "records",
               "type": "multi",
               "label": "Medical records needed",
-              "showWhen": { "packet": false },
               "choices": [
                 { "value": "Recent Progress Note" },
                 { "value": "Labs" },
@@ -86,7 +80,7 @@
               "text": "; Referred to Dr. {{providerName}}"
             },
             {
-              "when": { "packet": false, "records": "*" },
+              "when": { "records": "*" },
               "text": "; Medical Records Needed: {{records}}"
             },
             {
