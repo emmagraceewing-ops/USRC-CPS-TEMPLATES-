@@ -6,7 +6,7 @@
       "templates": [
         {
           "id": "referral-review",
-          "title": "Patient Case Action Note",
+          "title": "Patient Case Message",
           "copyLabel": "Copy Note",
           "options": [
             {
@@ -32,6 +32,17 @@
               "id": "packet",
               "type": "toggle",
               "label": "Full referral packet included"
+            },
+            {
+              "id": "records",
+              "type": "multi",
+              "label": "Medical records needed",
+              "showWhen": { "packet": false },
+              "choices": [
+                { "value": "Recent Progress Note" },
+                { "value": "Labs" },
+                { "value": "Imaging" }
+              ]
             },
             {
               "id": "auth",
@@ -75,8 +86,8 @@
               "text": "; Referred to Dr. {{providerName}}"
             },
             {
-              "when": { "packet": false },
-              "text": "; Medical Records Needed: Recent Progress Note, Labs, Imaging"
+              "when": { "packet": false, "records": "*" },
+              "text": "; Medical Records Needed: {{records}}"
             },
             {
               "when": { "auth": "fax" },
