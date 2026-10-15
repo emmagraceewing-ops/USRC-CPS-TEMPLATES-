@@ -1,0 +1,114 @@
+{
+  "title": "USRC-CPS Copy Tool",
+  "categories": [
+    {
+      "name": "Referrals",
+      "templates": [
+        {
+          "id": "referral-review",
+          "title": "Referral Review Note",
+          "copyLabel": "Copy Note",
+          "options": [
+            {
+              "id": "date",
+              "type": "field",
+              "label": "Date",
+              "default": "today"
+            },
+            {
+              "id": "provider",
+              "type": "toggle",
+              "label": "Referred to a specific provider"
+            },
+            {
+              "id": "providerName",
+              "type": "field",
+              "label": "Provider (after \"Dr.\")",
+              "placeholder": "e.g. Brookens",
+              "fallback": "[Provider]",
+              "showWhen": { "provider": true }
+            },
+            {
+              "id": "packet",
+              "type": "toggle",
+              "label": "Full referral packet included"
+            },
+            {
+              "id": "auth",
+              "type": "choice",
+              "label": "Referral authorization",
+              "default": "none",
+              "choices": [
+                { "value": "none", "label": "None needed" },
+                { "value": "fax", "label": "Auth # in fax" },
+                { "value": "portal", "label": "Auth # found in portal" },
+                { "value": "va-prelim", "label": "VA preliminary auth" },
+                { "value": "required-va", "label": "Required, none provided (VA)" },
+                { "value": "required-nonva", "label": "Required, none provided (non-VA)" }
+              ]
+            },
+            {
+              "id": "authNumber",
+              "type": "field",
+              "label": "Auth Number",
+              "placeholder": "e.g. 11111111111",
+              "showWhen": { "auth": ["fax", "portal", "va-prelim"] }
+            },
+            {
+              "id": "special",
+              "type": "choice",
+              "label": "Special case",
+              "default": "none",
+              "choices": [
+                { "value": "none", "label": "None" },
+                { "value": "no-insurance", "label": "No insurance on referral" },
+                { "value": "self-pay", "label": "Self-pay" }
+              ]
+            }
+          ],
+          "parts": [
+            {
+              "text": "Referral reviewed by Valerie Health {{date}}"
+            },
+            {
+              "when": { "provider": true },
+              "text": "; Referred to Dr. {{providerName}}"
+            },
+            {
+              "when": { "packet": false },
+              "text": "; Medical Records Needed: Recent Progress Note, Labs, Imaging"
+            },
+            {
+              "when": { "auth": "fax" },
+              "text": "; Referral Authorization Number: {{authNumber}} (included in fax)"
+            },
+            {
+              "when": { "auth": "portal" },
+              "text": "; Referral Authorization Number: {{authNumber}} (found in portal)"
+            },
+            {
+              "when": { "auth": "va-prelim" },
+              "text": "; Referral Authorization Number: {{authNumber}} (included in fax). This is a preliminary auth. Please supply VA with first appointment date"
+            },
+            {
+              "when": { "auth": "required-va" },
+              "text": "; Referral Authorization is required. Submit form (see completed form in patient chart)"
+            },
+            {
+              "when": { "auth": "required-nonva" },
+              "text": "; Referral Authorization is required. Submit request for PCP Referral Auth (see order group)"
+            },
+            {
+              "when": { "special": "no-insurance" },
+              "text": "; No insurance information provided with referral"
+            },
+            {
+              "when": { "special": "self-pay" },
+              "text": "; Patient is Self-Pay"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

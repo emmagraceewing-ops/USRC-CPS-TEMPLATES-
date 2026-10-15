@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USRC-CPS Copy Tool</title>
+    <style>
+        :root {
+            color-scheme: light dark;
+            --primary-color: #0056b3;
+            --primary-hover: #004085;
+            --secondary-color: #f8f9fa;
+            --border-color: #dee2e6;
+            --text-color: #212529;
+            --muted-color: #555;
+            --page-bg: #f4f6f9;
+            --container-bg: #ffffff;
+            --preview-bg: #ffffff;
+            --heading-color: #333;
+            --success-color: #28a745;
+            --warn-color: #8a5a00;
+            --on-primary: #ffffff;
+            --toggle-on-bg: #0056b3;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary-color: #6aaeff;
+                --primary-hover: #8cc0ff;
+                --secondary-color: #23272e;
+                --border-color: #3b414a;
+                --text-color: #e8eaed;
+                --muted-color: #b4b9c1;
+                --page-bg: #14171c;
+                --container-bg: #1b1f26;
+                --preview-bg: #14171c;
+                --heading-color: #e8eaed;
+                --success-color: #2e9c4a;
+                --warn-color: #f0b44c;
+                --on-primary: #0b1a2e;
+                --toggle-on-bg: #3a78c2;
+            }
+        }
+
+        [hidden] { display: none !important; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.5;
+            color: var(--text-color);
+            background-color: var(--page-bg);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--container-bg);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        h2.category {
+            color: var(--primary-color);
+            font-size: 1.15rem;
+            margin: 30px 0 12px;
+        }
+
+        h2.category:first-child { margin-top: 0; }
+
+        .card {
+            background: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--heading-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .choice-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .choice-stack .input-field { flex-direction: column; }
+
+        .option-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--muted-color);
+        }
+
+        .choice-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .toggle {
+            background: var(--container-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 8px 14px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+
+        .toggle:hover { border-color: var(--primary-color); }
+
+        .toggle[aria-pressed="true"] {
+            background: var(--toggle-on-bg);
+            border-color: var(--toggle-on-bg);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .input-group:empty { display: none; }
+
+        .input-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-field label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--muted-color);
+        }
+
+        .input-field input {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            background: var(--container-bg);
+            color: var(--text-color);
+        }
+
+        .preview-area {
+            background: var(--preview-bg);
+            border-left: 4px solid var(--primary-color);
+            padding: 10px 15px;
+            margin-bottom: 12px;
+            font-family: monospace;
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .static-preview {
+            background: var(--preview-bg);
+            border-left: 4px solid #6c757d;
+            padding: 15px;
+            margin-bottom: 12px;
+            font-family: monospace;
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .missing-note {
+            color: var(--warn-color);
+            font-size: 0.85rem;
+            margin: -4px 0 12px;
+        }
+
+        .missing-note:empty { display: none; }
+
+        .btn-copy {
+            background-color: var(--primary-color);
+            color: var(--on-primary);
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.15s ease;
+        }
+
+        .btn-copy:hover { background-color: var(--primary-hover); }
+
+        .btn-copy.copied {
+            background-color: var(--success-color);
+            color: #ffffff;
+        }
+
+        button:focus-visible,
+        input:focus-visible {
+            outline: 3px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .container { padding: 18px; }
+            .card { padding: 15px; }
+            h1 { font-size: 1.5rem; }
+            .toggle { padding: 10px 14px; }
+            .btn-copy { padding: 14px 20px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 id="app-title">USRC-CPS Copy Tool</h1>
+    <div id="templates">Loading templates…</div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
