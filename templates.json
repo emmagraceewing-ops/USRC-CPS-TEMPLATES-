@@ -6,7 +6,7 @@
       "templates": [
         {
           "id": "referral-review",
-          "title": "Referral Review Note",
+          "title": "Patient Case Action Note",
           "copyLabel": "Copy Note",
           "options": [
             {
