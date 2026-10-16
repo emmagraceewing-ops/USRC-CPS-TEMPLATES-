@@ -18,7 +18,10 @@
             {
               "id": "provider",
               "type": "toggle",
-              "label": "Referred to a specific provider"
+              "label": "Referred to a specific provider",
+              "unless": {
+                "special": "incomplete-fax"
+              }
             },
             {
               "id": "providerName",
@@ -26,17 +29,31 @@
               "label": "Provider (after \"Dr.\")",
               "placeholder": "e.g. Brookens",
               "fallback": "[Provider]",
-              "showWhen": { "provider": true }
+              "showWhen": {
+                "provider": true
+              },
+              "unless": {
+                "special": "incomplete-fax"
+              }
             },
             {
               "id": "records",
               "type": "multi",
               "label": "Medical records needed",
               "choices": [
-                { "value": "Recent Progress Note" },
-                { "value": "Labs" },
-                { "value": "Imaging" }
-              ]
+                {
+                  "value": "Recent Progress Note"
+                },
+                {
+                  "value": "Labs"
+                },
+                {
+                  "value": "Imaging"
+                }
+              ],
+              "unless": {
+                "special": "incomplete-fax"
+              }
             },
             {
               "id": "auth",
@@ -44,20 +61,50 @@
               "label": "Referral authorization",
               "default": "none",
               "choices": [
-                { "value": "none", "label": "None needed" },
-                { "value": "fax", "label": "Auth # in fax" },
-                { "value": "portal", "label": "Auth # found in portal" },
-                { "value": "va-prelim", "label": "VA preliminary auth" },
-                { "value": "required-va", "label": "Required, none provided (VA)" },
-                { "value": "required-nonva", "label": "Required, none provided (non-VA)" }
-              ]
+                {
+                  "value": "none",
+                  "label": "None needed"
+                },
+                {
+                  "value": "fax",
+                  "label": "Auth # in fax"
+                },
+                {
+                  "value": "portal",
+                  "label": "Auth # found in portal"
+                },
+                {
+                  "value": "va-prelim",
+                  "label": "VA preliminary auth"
+                },
+                {
+                  "value": "required-va",
+                  "label": "Required, none provided (VA)"
+                },
+                {
+                  "value": "required-nonva",
+                  "label": "Required, none provided (non-VA)"
+                }
+              ],
+              "unless": {
+                "special": "incomplete-fax"
+              }
             },
             {
               "id": "authNumber",
               "type": "field",
               "label": "Auth Number",
               "placeholder": "e.g. 11111111111",
-              "showWhen": { "auth": ["fax", "portal", "va-prelim"] }
+              "showWhen": {
+                "auth": [
+                  "fax",
+                  "portal",
+                  "va-prelim"
+                ]
+              },
+              "unless": {
+                "special": "incomplete-fax"
+              }
             },
             {
               "id": "special",
@@ -65,9 +112,22 @@
               "label": "Special case",
               "default": "none",
               "choices": [
-                { "value": "none", "label": "None" },
-                { "value": "no-insurance", "label": "No insurance on referral" },
-                { "value": "self-pay", "label": "Self-pay" }
+                {
+                  "value": "none",
+                  "label": "None"
+                },
+                {
+                  "value": "no-insurance",
+                  "label": "No insurance on referral"
+                },
+                {
+                  "value": "self-pay",
+                  "label": "Self-pay"
+                },
+                {
+                  "value": "incomplete-fax",
+                  "label": "Incomplete fax"
+                }
               ]
             }
           ],
@@ -76,40 +136,85 @@
               "text": "Referral reviewed by Valerie Health {{date}}"
             },
             {
-              "when": { "provider": true },
-              "text": "; Referred to Dr. {{providerName}}"
+              "when": {
+                "provider": true
+              },
+              "text": "; Referred to Dr. {{providerName}}",
+              "unless": {
+                "special": "incomplete-fax"
+              }
             },
             {
-              "when": { "records": "*" },
-              "text": "; Medical Records Needed: {{records}}"
+              "when": {
+                "records": "*"
+              },
+              "text": "; Medical Records Needed: {{records}}",
+              "unless": {
+                "special": "incomplete-fax"
+              }
             },
             {
-              "when": { "auth": "fax" },
-              "text": "; Referral Authorization Number: {{authNumber}} (included in fax)"
+              "when": {
+                "auth": "fax"
+              },
+              "text": "; Referral Authorization Number: {{authNumber}} (included in fax)",
+              "unless": {
+                "special": "incomplete-fax"
+              }
             },
             {
-              "when": { "auth": "portal" },
-              "text": "; Referral Authorization Number: {{authNumber}} (found in portal)"
+              "when": {
+                "auth": "portal"
+              },
+              "text": "; Referral Authorization Number: {{authNumber}} (found in portal)",
+              "unless": {
+                "special": "incomplete-fax"
+              }
             },
             {
-              "when": { "auth": "va-prelim" },
-              "text": "; Referral Authorization Number: {{authNumber}} (included in fax). This is a preliminary auth. Please supply VA with first appointment date"
+              "when": {
+                "auth": "va-prelim"
+              },
+              "text": "; Referral Authorization Number: {{authNumber}} (included in fax). This is a preliminary auth. Please supply VA with first appointment date",
+              "unless": {
+                "special": "incomplete-fax"
+              }
             },
             {
-              "when": { "auth": "required-va" },
-              "text": "; Referral Authorization is required. Submit form (see completed form in patient chart)"
+              "when": {
+                "auth": "required-va"
+              },
+              "text": "; Referral Authorization is required. Submit form (see completed form in patient chart)",
+              "unless": {
+                "special": "incomplete-fax"
+              }
             },
             {
-              "when": { "auth": "required-nonva" },
-              "text": "; Referral Authorization is required. Submit request for PCP Referral Auth (see order group)"
+              "when": {
+                "auth": "required-nonva"
+              },
+              "text": "; Referral Authorization is required. Submit request for PCP Referral Auth (see order group)",
+              "unless": {
+                "special": "incomplete-fax"
+              }
             },
             {
-              "when": { "special": "no-insurance" },
+              "when": {
+                "special": "no-insurance"
+              },
               "text": "; No insurance information provided with referral"
             },
             {
-              "when": { "special": "self-pay" },
+              "when": {
+                "special": "self-pay"
+              },
               "text": "; Patient is Self-Pay"
+            },
+            {
+              "when": {
+                "special": "incomplete-fax"
+              },
+              "text": "; Incomplete fax received. Will monitor faxes for updated version and attach to chart. If not received, follow up with referring provider for new referral copy."
             }
           ]
         }
